@@ -1,31 +1,46 @@
 import { useState } from "react";
-import Button from "./components/Button";
-function App() {
-  const [status, setStatus] = useState(0);
 
+function App() {
+  const [status, setStatus] = useState('0');
+  const handleClick = (value: string) => {
+    if(value === 'AC') setStatus('0');
+    if(value === '=') {
+      try{
+        setStatus(eval(status))
+      } catch{
+        throw new Error('Invalid expression')
+      }
+    }
+    if(status === '0' || value !== '.'){
+      setStatus(value);
+    }
+    else{
+      setStatus(prev => prev + value)
+    }
+  }
+  
   return (
-    <div className="bg-gradient-to-br from-blue-600 to-violet-600 w-screen h-screen flex justify-center items-center">
-      <div className=" relative w-96 h-96">
-        <div className="absolute h-10 w-96 bg-gradient-to-br from-blue-500 to-violet-200 text-white">
+    <>
+    <div className="w-screen h-screen flex justify-center items-center">
+      <div className="bg-gray-300 relative w-96 h-96">
+        <div className="h-14 w-full bg-gray-400 text-white flex items-center justify-end px-4 text-2xl">
           {status}
         </div>
-        <div className="absolute top-10 bottom-0 right-0 left-0 grid grid-cols-4 grid-rows-4 gap-0.5 bg-violet-400">
-          <Button onClick={() => alert("here")} children="AC" />
-          <Button onClick={() => alert("here")} children="+/-" />
-          <Button onClick={() => alert("here")} children="%" />
-          <Button onClick={() => alert("here")} children="/" />
-          <Button onClick={() => alert("here")} children="7" />
-          <Button onClick={() => alert("here")} children="8" />
-          <Button onClick={() => alert("here")} children="9" />
-          <Button onClick={() => alert("here")} children="6" />
-          <Button onClick={() => alert("here")} children="5" />
-          <Button onClick={() => alert("here")} children="4" />
-          <Button onClick={() => alert("here")} children="3" />
-          <Button onClick={() => alert("here")} children="2" />
-          <Button onClick={() => alert("here")} children="1" />
-        </div>
+        <div className="absolute top-10 bottom-0 right-0 left-0 grid grid-cols-4 grid-rows-5 gap-0.5 ">
+  {["AC", "+/-", "%", "/", "7", "8", "9", "*", "4", "5", "6", "-", "1", "2", "3", "+", "0", ".", "="].map((char, index) => (
+    <button
+      key={index}
+      className="bg-gray-200 text-xl font-bold flex items-center justify-center p-4"
+      onClick={ () => handleClick(char)}
+    >
+      {char}
+    </button>
+  ))}
+</div>
+
       </div>
     </div>
+    </>
   );
 }
 
